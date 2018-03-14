@@ -168,7 +168,7 @@ def	netcat_command_injection():
 			i+=1
 			
 	#display message
-	print "to see if a reverse shell has opened listen with netcat"
+	print "to see if a reverse shell has opened listen with netcat!"
 
 #define trespass_XSS	
 def trespass_XSS():
